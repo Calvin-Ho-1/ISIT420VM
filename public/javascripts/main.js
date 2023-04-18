@@ -150,42 +150,6 @@ function Submit500Orders() {
             })  
             .catch(error => console.error(error));
       }
-
-
-
-
-    
-    // let date;
-    // currentTime = new Date();
-    // for (let i = 0; i < 500; i++){
-        
-    //     if (i == 0){
-    //         date = currentTime;
-    //     }
-    //     else {
-    //         date = new Date(currentTime.getTime() + (Math.floor(Math.random() * 30000) + 5000));
-    //     }
-    //     let Order = new orderObject(
-    //         document.getElementById("storeID").value,
-    //         document.getElementById("salesPersonID").value,
-    //         document.getElementById("cdID").value,
-    //         document.getElementById("pricePaid").value,
-    //         document.getElementById("date").value
-    //     );
-        
-
-    //     fetch ('/SubmitOrder', {
-    //         method: "POST",
-    //         body: JSON.stringify(Order),
-    //         headers: {"Content-type": "application/json; charset=UTF-8"},
-    //     })
-    //         .then(response => response.json()) 
-    //         .then(json => {
-    //             console.log(json);
-      
-    //         })  
-    //         .catch(error => console.error(error));
-    //   }
 }
 
 
