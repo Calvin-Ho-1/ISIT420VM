@@ -103,26 +103,40 @@ function SubmitOneOrder(){
   
         })  
         .catch(error => console.error(error));
-  }
+}
 
 function Submit500Orders() {
-    currentTime = new Date();
-    for (let i = 0; i < 500; i++){
-        let date;
-        if (i == 0){
-            date = currentTime;
-        }
-        else {
-            date = new Date(currentTime.getTime() + (Math.floor(Math.random() * 30000) + 5000));
-        }
+    let currentTime = new Date();
+
+    for (let i = 0; i < 500; i++) {
+        let storePoint = Math.floor(Math.random() * storeIDArray.length);
+        let randomstoreID = storeIDArray[storePoint];
+    
+        let salesPersonPointer =  (Math.floor(Math.random() * 4)) + 1;
+        let salesPersonID = (storePoint * 4) + salesPersonPointer;
+    
+        let cdID = cdIDArray[Math.floor(Math.random() * cdIDArray.length)];
+    
+        let pricePaid = Math.floor(Math.random() * 15) + 5;
+    
+        let date = new Date(currentTime.getTime() + (Math.floor(Math.random() * 30000) + 5000));
+    
+    // A note to myself. This code didn't work because it was inputting empty values from the textbox. THEN it started to catch up then it doesn't again
+    //     let Order = new orderObject(
+    //         document.getElementById("storeID").value,
+    //         document.getElementById("salesPersonID").value,
+    //         document.getElementById("cdID").value,
+    //         document.getElementById("pricePaid").value,
+    //         document.getElementById("date").value
+    //     );
+        //This code works though
         let Order = new orderObject(
-            document.getElementById("storeID").value,
-            document.getElementById("salesPersonID").value,
-            document.getElementById("cdID").value,
-            document.getElementById("pricePaid").value,
-            document.getElementById("date").value
+            randomstoreID,
+            salesPersonID,
+            cdID,
+            pricePaid,
+            date.toLocaleString()
         );
-        
 
         fetch ('/SubmitOrder', {
             method: "POST",
@@ -136,6 +150,42 @@ function Submit500Orders() {
             })  
             .catch(error => console.error(error));
       }
+
+
+
+
+    
+    // let date;
+    // currentTime = new Date();
+    // for (let i = 0; i < 500; i++){
+        
+    //     if (i == 0){
+    //         date = currentTime;
+    //     }
+    //     else {
+    //         date = new Date(currentTime.getTime() + (Math.floor(Math.random() * 30000) + 5000));
+    //     }
+    //     let Order = new orderObject(
+    //         document.getElementById("storeID").value,
+    //         document.getElementById("salesPersonID").value,
+    //         document.getElementById("cdID").value,
+    //         document.getElementById("pricePaid").value,
+    //         document.getElementById("date").value
+    //     );
+        
+
+    //     fetch ('/SubmitOrder', {
+    //         method: "POST",
+    //         body: JSON.stringify(Order),
+    //         headers: {"Content-type": "application/json; charset=UTF-8"},
+    //     })
+    //         .then(response => response.json()) 
+    //         .then(json => {
+    //             console.log(json);
+      
+    //         })  
+    //         .catch(error => console.error(error));
+    //   }
 }
 
 
