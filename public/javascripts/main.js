@@ -2,12 +2,13 @@ const storeIDArray = [98053 , 98007, 98077, 98055, 98011, 98046];
 const cdIDArray = [123456, 123654, 321456, 321654, 654123, 654321, 543216, 354126, 621453, 623451];
 
 let orderObject = function (pStoreID, pSalesPersonID, pCdID, pPricepaid, pDate) {
-    this.storeID = pStoreID  
-    this.salesPersonID = pSalesPersonID;
+    this.StoreID = pStoreID  
+    this.SalesPersonID = pSalesPersonID;
     this.CdID = pCdID;
-    this.pricePaid = pPricepaid;  
-    this.date = pDate;
+    this.PricePaid = parseInt(pPricepaid);  
+    this.Date = pDate;
 }
+
 
  document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("createBtn").addEventListener("click", function(){
@@ -24,6 +25,23 @@ let orderObject = function (pStoreID, pSalesPersonID, pCdID, pPricepaid, pDate) 
         Submit500Orders();
         
     })
+
+    document.getElementById("sortSalesNumPerCD").addEventListener("click", function(){
+        getSalesPerCd();
+        console.log("Sales Per Cd")
+        
+    });
+
+    document.getElementById("sortOrdersByStore").addEventListener("click", function(){
+        ordersTotalByStore();
+        console.log("Sales Per Cd")
+        
+    });
+
+    // document.getElementById("selectMostRecentBtn").addEventListener("click", function(){
+    //     getMostRecent();
+        
+    // })
     //let orderObject.date = ; 
 });
 
@@ -66,15 +84,15 @@ function SubmitOneOrder(){
         document.getElementById("pricePaid").value,
         document.getElementById("date").value
     );
-
+    console.log(Order);
     let newRow = document.createElement("tr");
 
     let storeIDCell = document.createElement("td");
-    storeIDCell.innerHTML = Order.storeID;
+    storeIDCell.innerHTML = Order.StoreID;
     newRow.appendChild(storeIDCell);
     
     let salesPersonIDCell = document.createElement("td");
-    salesPersonIDCell.innerHTML = Order.salesPersonID;
+    salesPersonIDCell.innerHTML = Order.SalesPersonID;
     newRow.appendChild(salesPersonIDCell);
     
     let cdIDCell = document.createElement("td");
@@ -82,11 +100,11 @@ function SubmitOneOrder(){
     newRow.appendChild(cdIDCell);
     
     let pricePaidCell = document.createElement("td");
-    pricePaidCell.innerHTML = Order.pricePaid;
+    pricePaidCell.innerHTML = Order.PricePaid;
     newRow.appendChild(pricePaidCell);
     
     let dateCell = document.createElement("td");
-    dateCell.innerHTML = Order.date;
+    dateCell.innerHTML = Order.Date;
     newRow.appendChild(dateCell);
     
     document.getElementById("orderTable").appendChild(newRow);
@@ -103,6 +121,7 @@ function SubmitOneOrder(){
   
         })  
         .catch(error => console.error(error));
+
 }
 
 function Submit500Orders() {
@@ -129,15 +148,15 @@ function Submit500Orders() {
     //         document.getElementById("pricePaid").value,
     //         document.getElementById("date").value
     //     );
-        //This code works though
+
         let Order = new orderObject(
             randomstoreID,
             salesPersonID,
             cdID,
             pricePaid,
-            date.toLocaleString()
+            date
         );
-
+        console.log(Order);
         fetch ('/SubmitOrder', {
             method: "POST",
             body: JSON.stringify(Order),
@@ -154,156 +173,135 @@ function Submit500Orders() {
 
 
 
-//For 500
-    
-// let orderArray = [];
-
-// define a constructor to create Order objects
-// let MovieObject = function (pTitle, pYear, pGenre, pMan, pWoman, pURL) {
-//     this.ID = Math.random().toString(16).slice(5)  // tiny chance could get duplicates!
-//     this.Title = pTitle;
-//     this.Year = pYear;
-//     this.Genre = pGenre;  // action  comedy  drama  horrow scifi  musical  western
-// }
-
-
-
-// let selectedGenre = "not selected";
-
-// document.addEventListener("DOMContentLoaded", function () {
-
-//     createList();
-
-// add button events ************************************************************************
-    
-//     document.getElementById("buttonAdd").addEventListener("click", function () {
-//         let newMovie = new OrderObject(document.getElementById("title").value, 
-//         document.getElementById("year").value, selectedGenre);
-
-//         fetch('/AddMovie', {
-//             method: "POST",
-//             body: JSON.stringify(newMovie),
-//             headers: {"Content-type": "application/json; charset=UTF-8"}
-//             })
-//             .then(response => response.json()) 
-//             .then(json => console.log(json),
-//             createList()
-//             )
-//             .catch(err => console.log(err));
-    
-//         // $.ajax({
-//         //     url : "/AddMovie",
-//         //     type: "POST",
-//         //     data: JSON.stringify(newMovie),
-//         //     contentType: "application/json; charset=utf-8",
-//         //      success: function (result) {
-//         //         console.log(result);
-//         //         createList();
-//         //     }
-//         // });
-       
-//     });
-
-//     document.getElementById("buttonGet").addEventListener("click", function () {
-//         createList();      
-//     });
-
-//     document.getElementById("buttonDelete").addEventListener("click", function () {
-//         deleteMovie(document.getElementById("deleteID").value);      
-//     });
-    
-//     document.getElementById("buttonClear").addEventListener("click", function () {
-//         document.getElementById("title").value = "";
-//         document.getElementById("year").value = "";
-//     });
-
-//     $(document).bind("change", "#select-genre", function (event, ui) {
-//         selectedGenre = $('#select-genre').val();
-//     });
-
+function getSalesPerCd() {
+        // let getList = document.getElementById("list");
+        // getList.innerHTML = json[0]._id;
+    fetch('/getSalesPerCd')
+    // Handle success
+    .then(response => response.json())  // get the data out of the response object
+    .then(json => {
+        document.getElementById("sortTable").innerHTML = "";
+        const sortTable = document.createElement("table");
+        const headerRow = document.createElement("tr");
   
-
-// });  
-// // end of wait until document has loaded event  *************************************************************************
-
-
-// function createList() {
-// // update local array from server
-
-//     fetch('/getAllMovies')
-//     // Handle success
-//     .then(response => response.json())  // get the data out of the response object
-//     .then( responseData => fillUL(responseData))    //update our array and li's
-//     .catch(err => console.log('Request Failed', err)); // Catch errors
-
-//     // $.get("/getAllMovies", function(data, status){  // AJAX get
-//     //     movieArray = data;  // put the returned server json data into our local array
-        
-//     //       // clear prior data
-//     //     var divMovieList = document.getElementById("divMovieList");
-//     //     while (divMovieList.firstChild) {    // remove any old data so don't get duplicates
-//     //         divMovieList.removeChild(divMovieList.firstChild);
-//     //     };
-
-//     //     var ul = document.createElement('ul');
-
-//     //     movieArray.forEach(function (element,) {   // use handy array forEach method
-//     //         var li = document.createElement('li');
-//     //         li.innerHTML = element.ID + ":  &nbsp &nbsp  &nbsp &nbsp " + 
-//     //         element.Title + "  &nbsp &nbsp  &nbsp &nbsp "  
-//     //         + element.Year + " &nbsp &nbsp  &nbsp &nbsp  " + element.Genre;
-//     //         ul.appendChild(li);
-//     //     });
-//     //     divMovieList.appendChild(ul)
-
-//     // });
-// };
-
-// function fillUL(data) {
-//         // clear prior data
-//     var divMovieList = document.getElementById("divMovieList");
-//     while (divMovieList.firstChild) {    // remove any old data so don't get duplicates
-//         divMovieList.removeChild(divMovieList.firstChild);
-//     };
-
-//     var ul = document.createElement('ul');
-//     orderArray = data;
-//     orderArray.forEach(function (element,) {   // use handy array forEach method
-//         var li = document.createElement('li');
-//         li.innerHTML = element.ID + ":  &nbsp &nbsp  &nbsp &nbsp " + 
-//         element.Title + "  &nbsp &nbsp  &nbsp &nbsp "  
-//         + element.Year + " &nbsp &nbsp  &nbsp &nbsp  " + element.Genre;
-//         ul.appendChild(li);
-//     });
-//     divMovieList.appendChild(ul)
-// }
-
-// function deleteMovie(ID) {
-
-//     fetch('/DeleteMovie/' + ID, {
-//         method: "DELETE",
-//        // body: JSON.stringify(_data),
-//         headers: {"Content-type": "application/json; charset=UTF-8"}
-//       })
-//       .then(response => response.json()) 
-//       .then(json => console.log(json))
-//       .catch(err => console.log(err));
-
-
-
-//     // $.ajax({
-//     //     type: "DELETE",
-//     //     url: "/DeleteMovie/" +ID,
-//     //     success: function(result){
-//     //         alert(result);
-//     //         createList();
-//     //     },
-//     //     error: function (xhr, textStatus, errorThrown) {  
-//     //         alert("Server could not delete Movie with ID " + ID)
-//     //     }  
-//     // });
-   
-// }
-
-
+        const cdIDHeader = document.createElement("th");
+        cdIDHeader.innerHTML = "CD ID";
+        headerRow.appendChild(cdIDHeader);
   
+        const pricePaidHeader = document.createElement("th");
+        pricePaidHeader.innerHTML = "Price Paid";
+        headerRow.appendChild(pricePaidHeader);
+
+        sortTable.appendChild(headerRow);
+        document.getElementById("sortTable").appendChild(sortTable);
+
+        json.forEach(Order => {
+            let newRow = document.createElement("tr");
+
+            
+            let cdIDCell = document.createElement("td");
+            cdIDCell.innerHTML = Order._id;
+            newRow.appendChild(cdIDCell);
+            
+            let pricePaidCell = document.createElement("td");
+            pricePaidCell.innerHTML = Order.totalPrice;
+            newRow.appendChild(pricePaidCell);
+
+
+            sortTable.appendChild(newRow);
+
+        });
+  
+        //document.body.appendChild(sortTable);
+      })
+    .then(json => console.log(json))
+    .catch(err => console.log('Request Failed', err));
+    // })
+    
+    
+    // document.getElementById("orderTable").appendChild(newRow);
+ // Catch errors
+    console.log("Here");
+};
+
+// let cdIDCell = document.createElement("td");
+// cdIDCell.innerHTML = Order.CdID;
+// newRow.appendChild(cdIDCell);
+
+// let pricePaidCell = document.createElement("td");
+// pricePaidCell.innerHTML = Order.pricePaid;
+// newRow.appendChild(pricePaidCell);
+// document.getElementById("orderTable").appendChild(newRow);
+
+    // let newRow = document.createElement("tr");
+
+    
+    // let cdIDCell = document.createElement("td");
+    // cdIDCell.innerHTML = Order.CdID;
+    // newRow.appendChild(cdIDCell);
+    
+    // let pricePaidCell = document.createElement("td");
+    // pricePaidCell.innerHTML = Order.pricePaid;
+    // newRow.appendChild(pricePaidCell);
+
+    
+    // document.getElementById("orderTable").appendChild(newRow);
+
+
+function ordersTotalByStore() {
+
+    fetch('/orderTotalsByStore')
+    // Handle success
+    .then(response => response.json())  // get the data out of the response object
+    .then(json => {
+        document.getElementById("sortTable").innerHTML = "";
+        const sortTable = document.createElement("table");
+        const headerRow = document.createElement("tr");
+  
+        const storeIDHeader = document.createElement("th");
+        storeIDHeader.innerHTML = "Store ID";
+        headerRow.appendChild(storeIDHeader);
+  
+        const pricePaidHeader = document.createElement("th");
+        pricePaidHeader.innerHTML = "Price Paid";
+        headerRow.appendChild(pricePaidHeader);
+
+        sortTable.appendChild(headerRow);
+        document.getElementById("sortTable").appendChild(sortTable);
+
+        json.forEach(Order => {
+            let newRow = document.createElement("tr");
+
+            
+            let storeIDCell = document.createElement("td");
+            storeIDCell.innerHTML = Order._id;
+            newRow.appendChild(storeIDCell);
+            
+            let pricePaidCell = document.createElement("td");
+            pricePaidCell.innerHTML = Order.totalSalesQuantity;
+            newRow.appendChild(pricePaidCell);
+
+            sortTable.appendChild(newRow);
+
+        });
+  
+        //document.body.appendChild(sortTable);
+      })
+    //.then(json => console.log(json))
+    .catch(err => console.log('Request Failed', err)); // Catch errors
+    
+    // let newRow = document.createElement("tr");
+
+    // let storeIDCell = document.createElement("td");
+    // storeIDCell.innerHTML = Order.storeID;
+    // newRow.appendChild(storeIDCell);
+    
+    
+    // let pricePaidCell = document.createElement("td");
+    // pricePaidCell.innerHTML = Order.pricePaid;
+    // newRow.appendChild(pricePaidCell);
+    
+    // document.getElementById("orderTable").appendChild(newRow);
+};
+
+
